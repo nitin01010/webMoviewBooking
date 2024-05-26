@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShipBook | book movie ticket with ShipBook</title>
+</head>
+
+<body>
+    <%- include('header.ejs') %>
+        <%- include('heroSection.ejs') %>
+            <br />
+            <h2 class="textfav">favourite movie</h2>
+            <div class="movieslist">
+                <%- include('Card.ejs') %>
+            </div>
+            <%- include('footer.ejs') %>
+                <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+<% movies.forEach(movie=> { %>
+    <div class="Card">
+        <img src="<%= movie.thumbnail %>" class="imgLogo" alt="Logo" />
+        <h3>
+            <%= movie.title %>
+        </h3>
+        <p>
+            <%= movie.description %>
+        </p>
+        <p><b>Rating : </b>
+            <%= movie.rating %>
+        </p>
+        <a href="/movie/<%= movie.id %>">
+            <button class="BtnCard">Book now</button>
+        </a>
+    </div>
+    <% }); %>

@@ -1,0 +1,74 @@
+<%- include('header.ejs') %>
+    <div class="containerId">
+        <div class="movie-details">
+            <img src="<%= movie.thumbnail %>" alt="Movie Photo" class="movie-photo">
+            <div class="details">
+                <h2 class="title">Title: <%= movie.title %>
+                </h2>
+                <p class="location">Location : <b>
+                        <%= movie.location %>
+                    </b></p>
+                <p class="price">Price: ₹<b>
+                        <%= movie.price %>
+                    </b></p>
+                <p class="time">Time : <b>
+                        <%= movie.time %>
+                    </b></p>
+                <p class="date">Date : <b>
+                        <%= movie.date %>
+                    </b></p>
+                <button class="BtnCard" id="pay-button">Book now</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        document.getElementById('pay-button').addEventListener('click', async function () {
+            try {
+                const response = await fetch('/api/booking/<%= movie._id %>', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                const KEYid = "<%= process.env.KEYID %>"
+                const options = {
+                    key: KEYid,
+                    amount: data.amount,
+                    currency: data.currency,
+                    name: 'ShipBook',
+                    description: 'Movie Booking',
+                    order_id: data.id,
+                    handler: function (response) {
+                        console.log(response);
+                        verifyPayment(response);
+                    },
+                };
+                const rzp1 = new Razorpay(options);
+                rzp1.open();
+            } catch (error) {
+                console.error(error);
+            }
+        });
+
+        async function verifyPayment(paymentDetails) {
+            try {
+                const response = await fetch('/api/payment/verify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(paymentDetails)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert('Payment successful!');
+                } else {
+                    alert('Payment verification failed!');
+                }
+            } catch (error) {
+                alert('Error verifying payment!');
+            }
+        }
+    </script>

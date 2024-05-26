@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="/style.css">
+<Header class="Container">
+    <a href="/" id="Home">
+        <h2>ShipBook</h2>
+    </a>
+    <ul>
+        <li id="Lite"><a href="/">Home</a></li>
+        <% if (typeof userId !=='undefined' && userId !==null) { %>
+            <li><a href="#">Order</a></li>
+            <li><a href="/api/v1/logout">Logout</a></li>
+            <% } else { %>
+                <li><a href="/signup">Signup</a></li>
+                <li><a href="/login">Login</a></li>
+                <% } %>
+    </ul>
+</Header>
