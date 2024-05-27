@@ -6,6 +6,7 @@ const User = require("../models/users");
 const Movie = require("../db/movies");
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
+const Review = require("../models/review");
 
 
 router.get("/", async (req, res) => {
@@ -117,12 +118,14 @@ router.get("/movie/:id", async (req, res) => {
             const { userId } = decoded;
             const movieId = req.params.id;
             const movie = await Movie.findById(movieId).exec();
+            const reviews = await Review.find();
+
             const userNameReview = await User.findById(userId).exec();
             const { username } = userNameReview;
             if (!movie) {
                 return res.send('<h1>Movie not found</h1>');
             }
-            res.render("moviesDetails", { userId, movie, username });
+            res.render("moviesDetails", { userId, movie, username, reviews });
         });
     } catch (error) {
         console.error("Error rendering movie details page:", error);
@@ -262,4 +265,29 @@ router.post('/api/payment/verify', async (req, res) => {
     }
 });
 
+router.post('/reviews', async (req, res) => {
+    try {
+        const { review, post } = req.body;
+        const newReview = new Review({ review, post });
+        await newReview.save(); // Save the new review
+
+        // Find the user who posted the review and update their posts array
+        const user = await User.findById(post); // Assuming 'post' contains the user's ID
+        if (user) {
+            user.posts.push(newReview._id); // Push the ID of the new review into the user's posts array
+            await user.save(); // Save the updated user object
+        } else {
+            throw new Error("User not found");
+        }
+
+        // Fetch movies and reviews for rendering the dashboard
+        const movies = await Movie.find({}).exec();
+        const reviews = await Review.find();
+
+        // Render the dashboard with updated data
+        res.status(201).render("dashboard", { movies, reviews });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 module.exports = router;

@@ -1,0 +1,32 @@
+<div class="main-container">
+    <section class="form-section">
+        <h2>Submit a Review</h2>
+        <form action="/reviews" method="POST" class="review-form">
+            <div class="form-group">
+                <label for="review" class="form-label">Review:</label>
+                <textarea id="review" name="review" rows="4" class="form-textarea" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="post" class="form-label">Author:</label>
+                <input type="text" id="post" name="post" value="<%= userId %>" class="form-input" required>
+            </div>
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
+    </section>
+
+    <h2>All Reviews</h2>
+    <div class="reviews-container">
+        <% reviews.forEach(review=> { %>
+            <div class="review">
+
+                <p><strong>Author:</strong>
+                    <%= review.post %>
+                </p>
+                <p><strong>Review:</strong>
+                    <%= review.review %>
+                </p>
+            </div>
+            <% }); %>
+    </div>
+    </section>
+</div>

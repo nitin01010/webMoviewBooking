@@ -238,6 +238,73 @@ input[type="password"] {
     cursor: pointer;
   }
 
+
+  .main-container {
+    margin-top: 30px;
+    padding: 20px;
+}
+
+
+
+.header h1 {
+    font-size: 2em;
+    margin: 0;
+}
+
+.form-section {
+    margin-top: 20px;
+}
+
+.form-section h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-input,
+.form-textarea {
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+.submit-button {
+    padding: 10px 15px;
+    font-size: 1em;
+    color: white;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
 @media (max-width: 768px) {
    .containerId{
     width: auto;

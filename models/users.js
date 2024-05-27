@@ -21,7 +21,15 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    posts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'reviews'
+        }
+    ]
+}, {
+    timestamps: true
 });
 
 const User = mongoose.model("User", userSchema);

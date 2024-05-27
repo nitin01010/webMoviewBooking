@@ -1,4 +1,4 @@
-<%- include('header.ejs') %>
+<%- include('file/header.ejs') %>
     <div class="containerId">
         <div class="movie-details">
             <img src="<%= movie.thumbnail %>" alt="Movie Photo" class="movie-photo">
@@ -20,6 +20,7 @@
                 <button class="BtnCard" id="pay-button">Book now</button>
             </div>
         </div>
+        <%- include('file/review') %>
     </div>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
