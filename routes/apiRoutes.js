@@ -9,59 +9,38 @@ const crypto = require('crypto');
 const Review = require("../models/review");
 
 
+const verifyToken = (req, res, next) => {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(401).redirect("/signup");
+    }
+    jwt.verify(token, process.env.JWTSECRET, (err, decoded) => {
+        if (err) {
+            return res.status(401).redirect("/signup");
+        }
+        req.userId = decoded.userId;
+        next();
+    });
+};
+
 router.get("/", async (req, res) => {
     try {
-        const token = req.cookies.token;
-
-        if (token) {
-            jwt.verify(token, process.env.JWTSECRET, async (err, decoded) => {
-                const movies = await Movie.find({}).exec();
-                if (err) {
-                    res.render("index", { movies });
-                } else {
-                    const { userId } = decoded;
-                    res.render("dashboard", { movies, userId });
-                }
-            });
-        } else {
-            const movies = await Movie.find({}).exec();
-            res.render("index", { movies });
-        }
+        const movies = await Movie.find({});
+        res.render("index", { movies });
     } catch (error) {
-        console.log(error);
+        console.error("Error rendering index page:", error);
         res.status(500).send("<h1>Error rendering index page</h1>");
     }
 });
 
-router.get("/dashboard", async (req, res) => {
+router.get("/dashboard", verifyToken, async (req, res) => {
     try {
-        const token = req.cookies.token;
-        if (token) {
-            jwt.verify(token, process.env.JWTSECRET, async (err, decoded) => {
-                if (err) {
-                    res.status(401).redirect("/");
-                } else {
-                    const { userId } = decoded;
-                    try {
-                        const dbUser = await User.findById(userId).exec();
-                        if (dbUser) {
-                            const movies = await Movie.find({}).exec();
-                            res.render("dashboard", { userId, user: dbUser, movies });
-                        } else {
-                            res.status(404).redirect("/");
-                        }
-                    } catch (dbError) {
-                        console.error(dbError);
-                        res.status(500).redirect("/");
-                    }
-                }
-            });
-        } else {
-            res.redirect("/signup");
-        }
+        const dbUser = await User.findById(req.userId);
+        const movies = await Movie.find({});
+        res.render("dashboard", { userId: req.userId, user: dbUser, movies });
     } catch (error) {
-        console.error(error);
-        res.status(500).redirect("/");
+        console.error("Error rendering dashboard page:", error);
+        res.status(500).send("<h1>Error rendering dashboard page</h1>");
     }
 });
 
