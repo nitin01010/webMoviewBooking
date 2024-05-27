@@ -12,7 +12,6 @@ app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", Path.resolve("./views"));
 app.use(require("./routes/apiRoutes"));
-app.use(require("./routes/renderRoutes"));
 require("./db/dbConnection")
 
 app.listen(process.env.PORT, () => {
